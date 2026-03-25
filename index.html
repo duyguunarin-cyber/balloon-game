@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🎈 Balon Patlatma</title>
+  <title>🎈 Balloon Pop</title>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -220,13 +220,13 @@
 </head>
 <body>
 
-  <h1 class="logo">🎈 Balon Patlatma</h1>
-  <p class="tagline">Kaç balon patlatabilirsin?</p>
+  <h1 class="logo">🎈 Balloon Pop</h1>
+  <p class="tagline">How many balloons can you pop?</p>
 
   <!-- TABS -->
   <div class="tabs">
-    <button class="tab-btn active" onclick="showTab('game')">🎮 Oyna</button>
-    <button class="tab-btn"       onclick="showTab('leaderboard')">🏆 Skor Tablosu</button>
+    <button class="tab-btn active" onclick="showTab('game')">🎮 Play</button>
+    <button class="tab-btn"       onclick="showTab('leaderboard')">🏆 Leaderboard</button>
   </div>
 
   <!-- GAME SCREEN -->
@@ -240,20 +240,20 @@
       </div>
 
       <div id="hud">
-        <div class="hud-box"><div class="hud-label">Skor</div><div class="hud-val" id="score-disp">0</div></div>
+        <div class="hud-box"><div class="hud-label">Score</div><div class="hud-val" id="score-disp">0</div></div>
         <div id="timer-bar-wrap"><div id="timer-bar"></div></div>
-        <div class="hud-box"><div class="hud-label">Patlattın</div><div class="hud-val" id="popped-disp">0</div></div>
+        <div class="hud-box"><div class="hud-label">Popped</div><div class="hud-val" id="popped-disp">0</div></div>
       </div>
 
       <!-- START OVERLAY -->
       <div id="overlay">
         <div style="font-size:60px">🎈</div>
-        <h2>Balon Patlatma!</h2>
-        <p>Adını gir ve oyna! 30 saniyede mümkün olduğunca çok balon patlat.</p>
+        <h2>Balloon Pop!</h2>
+        <p>Enter your name and play! Pop as many balloons as you can in 30 seconds.</p>
         <div class="name-row">
-          <input type="text" id="player-name" placeholder="Adın ne?" maxlength="16" autocomplete="off"/>
+          <input type="text" id="player-name" placeholder="Your name?" maxlength="16" autocomplete="off"/>
         </div>
-        <button class="btn" id="start-btn">Oyna! 🎮</button>
+        <button class="btn" id="start-btn">Play! 🎮</button>
       </div>
 
     </div>
@@ -263,12 +263,12 @@
   <div class="screen" id="leaderboard-screen">
     <div class="lb-card">
       <div class="lb-header">
-        <h2>🏆 En İyi Oyuncular</h2>
-        <p>Herkesin skorları burada!</p>
+        <h2>🏆 Top Players</h2>
+        <p>Everyone's scores are here!</p>
       </div>
-      <div id="lb-body"><div class="empty-lb">Yükleniyor...</div></div>
+      <div id="lb-body"><div class="empty-lb">Loading...</div></div>
       <div class="lb-refresh">
-        <button onclick="loadLeaderboard()">↻ Yenile</button>
+        <button onclick="loadLeaderboard()">↻ Refresh</button>
       </div>
     </div>
   </div>
@@ -276,7 +276,7 @@
 <!-- ══════════════════ SCRIPT ══════════════════ -->
 <script>
 // ── CONFIG ─────────────────────────────────────────────────────────────
-// Skorları kaydetmek için ücretsiz JSONBin.io kullanılıyor.
+// Scores are saved using the free JSONBin.io service.
 // Kendi bin'ini oluşturmak için:
 //   1. https://jsonbin.io adresine git, üye ol
 //   2. Yeni bir Bin oluştur: içerik olarak [] yaz
@@ -356,16 +356,16 @@ async function saveScore(name, score, popped) {
 
 async function loadLeaderboard() {
   const body = document.getElementById('lb-body');
-  body.innerHTML = '<div class="empty-lb">Yükleniyor...</div>';
+  body.innerHTML = '<div class="empty-lb">Loading...</div>';
   const scores = await getScores();
   if (!scores.length) {
-    body.innerHTML = '<div class="empty-lb">Henüz hiç skor yok. İlk sen ol! 🎈</div>';
+    body.innerHTML = '<div class="empty-lb">No scores yet. Be the first! 🎈</div>';
     return;
   }
   body.innerHTML = `
     <table class="lb-table">
       <thead><tr>
-        <th>#</th><th>Oyuncu</th><th>Puan</th><th>Balon</th><th>Tarih</th>
+        <th>#</th><th>Player</th><th>Score</th><th>Balloons</th><th>Date</th>
       </tr></thead>
       <tbody>${scores.map((s,i) => `
         <tr>
@@ -465,17 +465,17 @@ async function endGame(name) {
 
   setTimeout(()=>{
     arena.querySelectorAll('.balloon').forEach(b=>b.remove());
-    const msg = popped<5?'Tekrar dene! 💪':popped<15?'Harika! 🌟':'Efsane! 🏆';
+    const msg = popped<5?'Try again! 💪':popped<15?'Amazing! 🌟':'Legendary! 🏆';
     overlay.innerHTML=`
       <div style="font-size:52px">${popped>=15?'🏆':'🎈'}</div>
-      <h2>Süre Doldu!</h2>
-      <p>Tebrikler <strong>${escHtml(name)}</strong>! ${msg}</p>
-      <p style="font-size:13px;color:#aaa">Patlattın: ${popped} balon</p>
+      <h2>Time's Up!</h2>
+      <p>Congrats <strong>${escHtml(name)}</strong>! ${msg}</p>
+      <p style="font-size:13px;color:#aaa">Popped: ${popped} balloons</p>
       <div class="big-score">${score}</div>
       <p style="font-size:12px;color:#bbb">puan</p>
       <div style="display:flex;gap:10px;margin-top:6px;">
-        <button class="btn" id="restart-btn">Tekrar Oyna</button>
-        <button class="btn secondary" onclick="showTabLb()">Skor Tablosu 🏆</button>
+        <button class="btn" id="restart-btn">Play Again</button>
+        <button class="btn secondary" onclick="showTabLb()">Leaderboard 🏆</button>
       </div>`;
     overlay.style.display='flex';
     document.getElementById('restart-btn').addEventListener('click',()=>{
@@ -489,12 +489,12 @@ async function endGame(name) {
 function showStartOverlay(prevName='') {
   overlay.innerHTML=`
     <div style="font-size:60px">🎈</div>
-    <h2>Balon Patlatma!</h2>
-    <p>Adını gir ve oyna! 30 saniyede mümkün olduğunca çok balon patlat.</p>
+    <h2>Balloon Pop!</h2>
+    <p>Enter your name and play! Pop as many balloons as you can in 30 seconds.</p>
     <div class="name-row">
-      <input type="text" id="player-name" placeholder="Adın ne?" maxlength="16" autocomplete="off" value="${escHtml(prevName)}"/>
+      <input type="text" id="player-name" placeholder="Your name?" maxlength="16" autocomplete="off" value="${escHtml(prevName)}"/>
     </div>
-    <button class="btn" id="start-btn">Oyna! 🎮</button>`;
+    <button class="btn" id="start-btn">Play! 🎮</button>`;
   overlay.style.display='flex';
   document.getElementById('start-btn').addEventListener('click',startGame);
 }
